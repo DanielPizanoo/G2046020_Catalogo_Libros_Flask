@@ -1,0 +1,6 @@
+//Crear entorno virtual
+virtualenv venv
+
+//Activar entorno virtual
+venv\Scripts\activate
+

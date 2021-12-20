@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <title>Libros</title>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item">
+                <img src="logo.PNG" width="150" height="60">
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="main.html">
+                    Inicio
+                </a>
+                <a class="navbar-item" href="verEditorial.html">
+                    Editoriales
+                </a>
+                <a class="navbar-item" href="verGeneros.html">
+                    Generos
+                </a>
+                <a class="navbar-item" href="verAutores.html">
+                    Autores
+                </a>
+                <a class="navbar-item" href="verLibros.html">
+                    Libros
+                </a>
+                <a class="navbar-item" href="verFavoritos.html">
+                    Favoritos
+                </a>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="index.html">
+                            <strong>Cerrar Sesión</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+                <form method="post" onsubmit="handleSubmit(event)">
+                    <!-- formulario -->
+                    <br>
+                    <label for="" class="label">Libros</label>
+                    <p>Editar libro</p>
+                    <br>
+                    <div class="control">
+                        <div class="select">
+                            <select title="id_libro" name="id_libro" onChange="getSelLibro(event);" id="id_libro">
+                                <option selected disabled>Selecciona un libro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="field">
+                        <label for="" class="label">Nombre del Libro: </label>
+                        <div class="control has-icons-left">
+                            <input title="titulo_libro" id="titulo_libro" name="titulo_libro" type="text" placeholder=""
+                                class="input">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <br>
+                        <label for="" class="label">Fecha de publicación: </label>
+                        <div class="control has-icons-left">
+                            <input title="fecha_publicacion" id="fecha_publicacion" name="fecha_publicacion" type="date"
+                                placeholder="" class="input">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <br>
+                        <label for="" class="label">Numero de páginas: </label>
+                        <div class="control has-icons-left">
+                            <input title="numero_paginas" id="numero_paginas" name="numero_paginas" type="text"
+                                placeholder="" class="input">
+                            <span class="icon is-small is-left">
+                                <i class="fa fa-envelope"></i>
+                            </span>
+                        </div>
+                        <br>
+                        <label for="" class="label">Formato: </label>
+                        <div class="select is-small">
+                            <select title="formato" id="formato" name="formato">
+                                <option>Formatos</option>
+                                <option>Fisico</option>
+                                <option>Digital</option>
+                            </select>
+                        </div>
+                        <br>
+                        <label for="" class="label">Editorial: </label>
+                        <div class="select is-small">
+                            <select title="id_editorial" name="id_editorial" id="id_editorial">
+                                <option>Selecciona un editorial</option>
+                            </select>
+                        </div>
+                        <br>
+                        <label for="" class="label">Genero: </label>
+                        <div class="select is-small">
+                            <select title="id_genero" name="id_genero" id="id_genero">
+                                <option>Selecciona un genero</option>
+                            </select>
+                        </div>
+                        <br>
+                        <label for="" class="label">Autor: </label>
+                        <div class="select is-small">
+                            <select title="id_autor" name="id_autor" id="id_autor">
+                                <option>Selecciona un autor</option>
+                            </select>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="field">
+                            <button class="button is-success">
+                                Actualizar
+                            </button>
+                        </div>
+                        <div class="field" id="resultado">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script async type="text/javascript">
+        //Llenar selects
+        function make_req() {
+            let req = new XMLHttpRequest();
+            req.open("GET", "http://localhost:5000/consulta");
+
+            req.onload = function () {
+                let arrayBuffer = JSON.parse(req.response);
+
+                //arrays
+                editoriales = arrayBuffer.editoriales;
+                autores = arrayBuffer.autores;
+                generos = arrayBuffer.generos;
+                libros = arrayBuffer.libros;
+
+                //Selects
+                selGeneros = document.querySelector("#id_genero");
+                selAutores = document.querySelector("#id_autor");
+                selEditoriales = document.querySelector("#id_editorial");
+                selLibros = document.querySelector("#id_libro");
+
+                //Pasar al frontend los datos recibidos en json
+                printSelectsGeneros(generos, selGeneros);
+                printSelectsAutores(autores, selAutores)
+                printSelectsEditoriales(editoriales, selEditoriales);
+                printSelectsLibros(libros, selLibros);
+
+                //Función para generar los elementos option "editoriales"
+                function printSelectsEditoriales(obj, sel) {
+                    Object.values(obj).forEach((element) => {
+                        let option = document.createElement("option");
+                        option.value = element.id_editorial;
+                        option.innerHTML = element.nombre_editorial;
+                        sel.appendChild(option);
+                    });
+                }
+
+                //Función para generar los elementos option "generos"
+                function printSelectsGeneros(obj, sel) {
+                    Object.values(obj).forEach((element) => {
+                        let option = document.createElement("option");
+                        option.value = element.id_genero;
+                        option.innerHTML = element.nombre_genero;
+                        sel.appendChild(option);
+                    });
+                }
+
+                //Función para generar los elementos option "autores"
+                function printSelectsAutores(obj, sel) {
+                    Object.values(obj).forEach((element) => {
+                        let option = document.createElement("option");
+                        option.value = element.id_autor;
+                        option.innerHTML = element.nombre_autor;
+                        sel.appendChild(option);
+                    });
+                }
+
+                //Función para generar los elementos option "libros"
+                function printSelectsLibros(obj, sel) {
+                    Object.values(obj).forEach((element) => {
+                        let option = document.createElement("option");
+                        option.value = element.id_libro;
+                        option.innerHTML = element.titulo_libro;
+                        sel.appendChild(option);
+                    });
+                }
+            };
+            req.send(null);
+        }
+        make_req();
+
+        //Obtener datos del libro seleccionado
+        function getSelLibro(event) {
+            let req = new XMLHttpRequest();
+            let id_libro = event.target.value;
+            console.log(id_libro);
+            req.open("GET", "http://localhost:5000/obtenerLibro/" + id_libro);
+            req.onload = function () {
+                let arrayBuffer = JSON.parse(req.response);
+                console.log(arrayBuffer);
+                document.querySelector("#titulo_libro").value = arrayBuffer.titulo_libro;
+                document.querySelector("#fecha_publicacion").value =
+                    arrayBuffer.fecha_publicacion;
+                document.querySelector("#numero_paginas").value = arrayBuffer.numero_paginas;
+                document.querySelector("#formato").value = arrayBuffer.formato;
+                document.querySelector("#id_genero").value = arrayBuffer.id_genero;
+                document.querySelector("#id_autor").value = arrayBuffer.id_autor;
+                document.querySelector("#id_editorial").value = arrayBuffer.id_editorial;
+            };
+            req.send();
+        }
+
+        // ENVIAR AL FORMULARIO AL BACKEND
+        function handleSubmit(event) {
+            event.preventDefault();
+            let formData = new FormData(event.target);
+            let object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            console.log(object);
+
+            async function send() {
+                let req = new XMLHttpRequest();
+                req.open("PATCH", "http://localhost:5000/actualizarLibro");
+                req.setRequestHeader("Content-Type", "application/json");
+                req.onload = function () {
+                    let arrayBuffer = JSON.parse(req.response);
+                    console.log(arrayBuffer);
+
+                    setTimeout(function () {
+                        window.location.assign("verLibros.html");
+                    }, 2000);
+                };
+                req.send(JSON.stringify(object));
+            }
+            send();
+        }
+    </script>
+</body>
+
+</html>

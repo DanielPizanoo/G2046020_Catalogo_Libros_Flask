@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <title>Autores</title>
+</head>
+
+<body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item">
+                <img src="logo.PNG" width="150" height="60">
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="main.html">
+                    Inicio
+                </a>
+                <a class="navbar-item" href="verEditorial.html">
+                    Editoriales
+                </a>
+                <a class="navbar-item" href="verGeneros.html">
+                    Generos
+                </a>
+                <a class="navbar-item" href="verAutores.html">
+                    Autores
+                </a>
+                <a class="navbar-item" href="verLibros.html">
+                    Libros
+                </a>
+                <a class="navbar-item" href="verFavoritos.html">
+                    Favoritos
+                </a>
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary" href="index.html">
+                            <strong>Cerrar Sesión</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+                <form method="post" onsubmit="handleSubmit(event);">
+                    <!-- formulario -->
+                    <br>
+                    <br>
+                    <label for="" class="label" align="center">Autores</label>
+                    <br>
+                    <div class="buttons">
+                        <a class="button is-small is-info" href="autor.html">
+                            <strong>Insertar</strong>
+                        </a>
+                    </div>
+                    <table class="table is-narrow" align="center">
+                        <!--{% for libro in consulta_libros %}-->
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Nacionalidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpo">
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function make_req() {
+            let req = new XMLHttpRequest();
+            req.open("GET", "http://localhost:5000/consultaAutores");
+
+            req.onload = function () {
+                let arrayBuffer = JSON.parse(req.response);
+
+                autores = arrayBuffer.autores;
+                console.log(autores);
+                tableAutores = document.querySelector("#cuerpo");
+
+                printTableEditorial(autores, tableAutores);
+
+                function printTableEditorial(obj, sel) {
+                    Object.values(obj).forEach((element) => {
+                        let celda = document.createElement("tr");
+                        let columna1 = document.createElement("td");
+                        let columna2 = document.createElement("td");
+                        let columna3 = document.createElement("td");
+                        let columna4 = document.createElement("td");
+                        columna1.innerText = element.id_autor;
+                        columna2.innerText = element.nombre_autor;
+                        columna3.innerText = element.fecha_nac;
+                        columna4.innerText = element.nacionalidad
+
+                        sel.appendChild(celda)
+                        sel.appendChild(columna1)
+                        sel.appendChild(columna2)
+                        sel.appendChild(columna3)
+                        sel.appendChild(columna4)
+                        console.log(celda);
+                        console.log(columna1);
+                        console.log(columna2);
+                        console.log(columna3);
+                        console.log(columna4);
+                    });
+                }
+            }
+            req.send(null);
+        }
+        make_req();
+    </script>
+</body>
+
+</html>

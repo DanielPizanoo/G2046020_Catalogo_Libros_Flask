@@ -1,0 +1,12 @@
+vista registrar
+vista login
+vista menu
+vista editorial
+vista genero
+vista autor
+vista libro (selects)
+ver tablas
+joins
+favoritos
+editar
+eliminar
