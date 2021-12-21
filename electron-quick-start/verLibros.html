@@ -75,6 +75,9 @@
                             <strong>Editar libro</strong>
                         </a>
                     </div>
+                    <div class="field" id="resultado">
+                    </div>
+                    <br>
                     <table class="table is-narrow ">
                         <thead>
                             <tr>
@@ -125,7 +128,6 @@
                         let columna7 = document.createElement("td");
                         let columna8 = document.createElement("td");
                         let columnaEliminar = document.createElement("td");
-                        console.log(columnaEliminar);
 
                         columna1.innerText = element.id_libro;
                         columna2.innerText = element.titulo_libro;
@@ -137,7 +139,6 @@
                         columna8.innerText = element.nombre_autor;
                         columnaEliminar.innerHTML = `<button class="button is-small is-danger is-outlined" 
                         onclick='eliminar(${element.id_libro});'>Eliminar</button>`;
-                        console.log(columnaEliminar);
 
                         sel.appendChild(celda)
                         sel.appendChild(columna1)
@@ -159,9 +160,12 @@
         function eliminar(id_libro) {
             let req = new XMLHttpRequest();
             req.open("DELETE", "http://localhost:5000/eliminarLibro/" + id_libro);
+            console.log(id_libro);
             req.setRequestHeader("Content-Type", "application/json");
             req.onload = () => {
                 let arrayBuffer = JSON.parse(req.response);
+                document.querySelector('#resultado').innerHTML = arrayBuffer;
+                console.log(arrayBuffer);
 
                 setTimeout(function () {
                     window.location.assign("verLibros.html");

@@ -204,9 +204,10 @@ def login():
     # email = request.form["email"]
     # password = request.form["password"]
     consulta_usuario = Usuarios.query.filter_by(email=email).first()
-    if consulta_usuario.password == password:
+    if consulta_usuario.email == email and consulta_usuario.password == password:
         return "Inicio de sesión exitoso"
-    return "El usuario y contraseña incorrecto"
+    else:
+        return "El usuario y contraseña incorrecto"
 
 
 # --------------------------------------------------------------------
@@ -444,7 +445,9 @@ def crearLibro():
 # Metodo para eliminar libros
 @app.route("/eliminarLibro/<id_libro>", methods=["DELETE"])
 def eliminarLibro(id_libro):
+    print(id_libro)
     libro = Libro.query.filter_by(id_libro=id_libro).first()
+    print(libro)
     db.session.delete(libro)
     db.session.commit()
     return "Libro eliminado exitosamente"
@@ -543,6 +546,9 @@ def eliminarFavorito(id_favorito):
     db.session.delete(favorito)
     db.session.commit()
     return "Libro favorito eliminado exitosamente"
+
+
+# --------------------------------------------------------------------
 
 if __name__ == "__main__":
     db.create_all()
